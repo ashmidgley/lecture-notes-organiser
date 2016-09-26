@@ -11,6 +11,7 @@
 		9721AA9E1D935943006470E0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9721AA9D1D935943006470E0 /* Assets.xcassets */; };
 		9721AAA11D935943006470E0 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9721AA9F1D935943006470E0 /* MainMenu.xib */; };
 		9721AAA91D935B5B006470E0 /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9721AAA81D935B5B006470E0 /* Quartz.framework */; };
+		979066571D98C0FC00812A17 /* myPDF.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 979066561D98C0FC00812A17 /* myPDF.pdf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -20,6 +21,7 @@
 		9721AAA01D935943006470E0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		9721AAA21D935943006470E0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9721AAA81D935B5B006470E0 /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = System/Library/Frameworks/Quartz.framework; sourceTree = SDKROOT; };
+		979066561D98C0FC00812A17 /* myPDF.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = myPDF.pdf; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,6 +56,7 @@
 		9721AA9A1D935943006470E0 /* progA2 */ = {
 			isa = PBXGroup;
 			children = (
+				979066561D98C0FC00812A17 /* myPDF.pdf */,
 				9721AA9B1D935943006470E0 /* AppDelegate.swift */,
 				9721AA9D1D935943006470E0 /* Assets.xcassets */,
 				9721AA9F1D935943006470E0 /* MainMenu.xib */,
@@ -122,6 +125,7 @@
 			files = (
 				9721AA9E1D935943006470E0 /* Assets.xcassets in Resources */,
 				9721AAA11D935943006470E0 /* MainMenu.xib in Resources */,
+				979066571D98C0FC00812A17 /* myPDF.pdf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -17,19 +17,23 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationDidFinishLaunching(aNotification: NSNotification) {
         // Insert code here to initialize your application
-        let url = NSBundle.mainBundle().URLForResource("lect15", withExtension: "pdf")
-        let pdf = PDFDocument(URL: url)
+        let url = NSBundle.mainBundle().URLForResource("myPDF", withExtension: "pdf")
         //let pages: Int = pdf.pageCount()
         //let text: String = pdf.string()
         //let page1 = pdf.pageAtIndex(0)
+        let pdf = PDFDocument(URL: url)
         ourPDF.setDocument(pdf)
-        //print("\(ourPDF.document) pages: \(pages)")
     }
 
     func applicationWillTerminate(aNotification: NSNotification) {
         // Insert code here to tear down your application
     }
 
+    @IBAction func choosePDF(sender: NSButton) {
+        NSWorkspace.sharedWorkspace().selectFile(nil, inFileViewerRootedAtPath: "/Home")
+        //NSWorkspace.sharedWorkspace().activateFileViewerSelectingURLs(files)
+        
+    }
 
 }
 

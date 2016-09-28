@@ -20,13 +20,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     func applicationDidFinishLaunching(aNotification: NSNotification) {
         // Insert code here to initialize your application
-        let url = NSBundle.mainBundle().URLForResource("myPDF", withExtension: "pdf")
-        let pdf = PDFDocument(URL: url)
-        ourPDF.setDocument(pdf)
-        pages = pdf.pageCount()
-        
-        let timer = NSTimer.scheduledTimerWithTimeInterval(0.2, target: self, selector: #selector(updateLabel), userInfo: nil, repeats: true)
-        timer.fire()
     }
 
     func applicationWillTerminate(aNotification: NSNotification) {
@@ -34,8 +27,32 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     @IBAction func choosePDF(sender: NSButton) {
-        NSWorkspace.sharedWorkspace().selectFile(nil, inFileViewerRootedAtPath: "/Home")
-        //NSWorkspace.sharedWorkspace().activateFileViewerSelectingURLs(files)
+        //NSWorkspace.sharedWorkspace().selectFile(nil, inFileViewerRootedAtPath: "/Home")
+        let fileChooser = NSOpenPanel();
+        fileChooser.title = "Choose a .pdf file";
+        fileChooser.showsResizeIndicator = true;
+        fileChooser.showsHiddenFiles = false;
+        fileChooser.canChooseDirectories = false;
+        fileChooser.canCreateDirectories = true;
+        fileChooser.allowsMultipleSelection = false;
+        fileChooser.allowedFileTypes = ["pdf"];
+        
+        if(fileChooser.runModal() == NSModalResponseOK) {
+            let result = fileChooser.URL
+            if(result != nil){
+                //let path = result!.path!
+                
+                let pdf = PDFDocument(URL: result)
+                ourPDF.setDocument(pdf)
+                pages = pdf.pageCount()
+                
+                let timer = NSTimer.scheduledTimerWithTimeInterval(0.2, target: self, selector: #selector(updateLabel), userInfo: nil, repeats: true)
+                timer.fire()
+            }
+        }else{
+            //User clicked on "Cancel"
+            return
+        }
     }
 
     @IBAction func nextPage(sender: NSButton) {
@@ -59,6 +76,18 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBAction func zoomOut(sender: NSButton) {
         if(ourPDF.canZoomOut()){
             ourPDF.zoomOut(self)
+        }
+    }
+    
+    @IBAction func zoomToFit(sender: NSButton) {
+        if ourPDF.scaleFactor() > 1.0 {
+            while ourPDF.scaleFactor() > 1.0 {
+                ourPDF.zoomOut(self)
+            }
+        }else if ourPDF.scaleFactor() < 1.0 {
+            while ourPDF.scaleFactor() < 1.0 {
+                ourPDF.zoomIn(self)
+            }
         }
     }
     

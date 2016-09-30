@@ -14,12 +14,26 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     @IBOutlet weak var window: NSWindow!
     @IBOutlet weak var ourPDF: PDFView!
+    
+    @IBOutlet weak var headerLabel: NSTextField!
+    @IBOutlet weak var currentDocLabel: NSTextField!
+    
     @IBOutlet weak var currentPageNoLabel: NSTextField!
-    @IBOutlet weak var goToPageNoField: NSSearchField!
-    var pages = 1
+    @IBOutlet weak var goToPageNoField: NSTextField!
+    
+    @IBOutlet weak var prevDocButton: NSButton!
+    @IBOutlet weak var nextDocButton: NSButton!
+
+    @IBOutlet weak var textSearchField: NSSearchField!
+    
+    var pages = 0
+    var docs = [NSURL]()
+    var docIndex = 0
     
     func applicationDidFinishLaunching(aNotification: NSNotification) {
         // Insert code here to initialize your application
+        prevDocButton.hidden = true
+        nextDocButton.hidden = true
     }
 
     func applicationWillTerminate(aNotification: NSNotification) {
@@ -34,42 +48,67 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         fileChooser.showsHiddenFiles = false;
         fileChooser.canChooseDirectories = false;
         fileChooser.canCreateDirectories = true;
-        fileChooser.allowsMultipleSelection = false;
+        fileChooser.allowsMultipleSelection = true;
         fileChooser.allowedFileTypes = ["pdf"];
         
         if(fileChooser.runModal() == NSModalResponseOK) {
-            let result = fileChooser.URL
-            if(result != nil){
-                //let path = result!.path!
-                
-                let pdf = PDFDocument(URL: result)
-                ourPDF.setDocument(pdf)
-                pages = pdf.pageCount()
-                
-                let timer = NSTimer.scheduledTimerWithTimeInterval(0.2, target: self, selector: #selector(updateLabel), userInfo: nil, repeats: true)
-                timer.fire()
+            self.docs = fileChooser.URLs
+            //let path = result!.path!
+            setPDF(docs[0])
+            headerLabel.stringValue = "Current Document:"
+            if(docs.count > 1){
+                prevDocButton.hidden = false
+                nextDocButton.hidden = false
             }
         }else{
             //User clicked on "Cancel"
             return
         }
     }
-
-    @IBAction func nextPage(sender: NSButton) {
-        if(ourPDF.canGoToNextPage()){
-            ourPDF.goToNextPage(self)
-        }
+    
+    func setPDF(url: NSURL){
+        let pdf = PDFDocument(URL: url)
+        ourPDF.setDocument(pdf)
+        pages = pdf.pageCount()
+        
+        let timer = NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: Selector("updateLabels"), userInfo: nil, repeats: true)
+        timer.fire()
     }
     
+    func updateLabels(){
+        currentPageNoLabel.stringValue = "Page \(ourPDF.document().indexForPage(ourPDF.currentPage())+1) of \(pages)"
+        let pathC = docs[docIndex].pathComponents!
+        currentDocLabel.stringValue = "\(pathC[pathC.count-1])"
+        
+    }
+
     @IBAction func previousPage(sender: NSButton) {
         if(ourPDF.canGoToPreviousPage()){
             ourPDF.goToPreviousPage(self)
         }
     }
     
-    @IBAction func zoomIn(sender: NSButton) {
-        if(ourPDF.canZoomIn()){
-            ourPDF.zoomIn(self)
+    @IBAction func nextPage(sender: NSButton) {
+        if(ourPDF.canGoToNextPage()){
+            ourPDF.goToNextPage(self)
+        }
+    }
+    
+    @IBAction func previousDocument(sender: NSButton) {
+        if !docs.isEmpty {
+            if(docIndex != 0){
+                docIndex -= 1
+                setPDF(docs[docIndex])
+            }
+        }
+    }
+    
+    @IBAction func nextDocument(sender: NSButton) {
+        if !docs.isEmpty {
+            if(docIndex != docs.count-1){
+                docIndex += 1
+                setPDF(docs[docIndex])
+            }
         }
     }
     
@@ -79,27 +118,28 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
     
-    @IBAction func zoomToFit(sender: NSButton) {
-        if ourPDF.scaleFactor() > 1.0 {
-            while ourPDF.scaleFactor() > 1.0 {
-                ourPDF.zoomOut(self)
-            }
-        }else if ourPDF.scaleFactor() < 1.0 {
-            while ourPDF.scaleFactor() < 1.0 {
-                ourPDF.zoomIn(self)
-            }
+    @IBAction func zoomIn(sender: NSButton) {
+        if(ourPDF.canZoomIn()){
+            ourPDF.zoomIn(self)
         }
     }
     
-    @IBAction func choosePage(sender: NSSearchField) {
+    @IBAction func zoomToFit(sender: NSButton) {
+        ourPDF.setScaleFactor(CGFloat(1.0))
+    }
+    
+    @IBAction func goToPage(sender: NSButton) {
         let pageNo = Int(goToPageNoField.stringValue)
         if pageNo != nil && pageNo <= pages{
             ourPDF.goToPage(ourPDF.document().pageAtIndex(pageNo!-1))
+            goToPageNoField.stringValue.removeAll()
         }
     }
     
-    func updateLabel(){
-        currentPageNoLabel.stringValue = "Page \(ourPDF.document().indexForPage(ourPDF.currentPage())+1) of \(pages)"
+    @IBAction func textSearch(sender: NSSearchField) {
+        let results = ourPDF.document().findString(textSearchField.stringValue, withOptions: 0)
+        print(results)
     }
+    
 }
 

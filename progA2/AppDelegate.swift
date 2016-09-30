@@ -14,6 +14,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     @IBOutlet weak var window: NSWindow!
     @IBOutlet weak var ourPDF: PDFView!
+    var pages = 0
+    var docs = [NSURL]()
+    var docIndex = 0
+    var loaded = false
     
     @IBOutlet weak var titleLabel: NSTextField!
     @IBOutlet weak var subtitleLabel: NSTextField!
@@ -28,15 +32,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBOutlet weak var nextDocButton: NSButton!
 
     @IBOutlet weak var textSearchField: NSSearchField!
-    
-    var pages = 0
-    var docs = [NSURL]()
-    var docIndex = 0
+    @IBOutlet weak var casesLabel: NSTextField!
+    @IBOutlet weak var searchCasesStepper: NSStepper!
     
     func applicationDidFinishLaunching(aNotification: NSNotification) {
         // Insert code here to initialize your application
         prevDocButton.hidden = true
         nextDocButton.hidden = true
+        searchCasesStepper.hidden = true
     }
 
     func applicationWillTerminate(aNotification: NSNotification) {
@@ -57,6 +60,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         if(fileChooser.runModal() == NSModalResponseOK) {
             self.docs = fileChooser.URLs
             //let path = result!.path!
+            self.loaded = true
             titleLabel.hidden = true
             subtitleLabel.hidden = true
             setPDF(docs[0])
@@ -76,7 +80,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         ourPDF.setDocument(pdf)
         pages = pdf.pageCount()
         
-        let timer = NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: Selector("updateLabels"), userInfo: nil, repeats: true)
+        let timer = NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: #selector(self.updateLabels), userInfo: nil, repeats: true)
         timer.fire()
     }
     
@@ -142,14 +146,24 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     @IBAction func textSearch(sender: NSSearchField) {
-        if textSearchField.stringValue != "" {
-            let results = ourPDF.document().findString(textSearchField.stringValue, withOptions: 0)
-    
-            if !results.isEmpty {
-                ourPDF.goToSelection(results[0] as! PDFSelection)
-                ourPDF.setHighlightedSelections(results)
+        if loaded {
+            if textSearchField.stringValue != "" {
+                let results = ourPDF.document().findString(textSearchField.stringValue, withOptions: 0)
+                if !results.isEmpty {
+                    casesLabel.stringValue = "\(results.count) cases"
+                    searchCasesStepper.hidden = false
+                    ourPDF.goToSelection(results[0] as! PDFSelection)
+                    ourPDF.setHighlightedSelections(results)
+                }
+            }else{
+                casesLabel.stringValue.removeAll()
+                searchCasesStepper.hidden = true
             }
         }
+    }
+    
+    @IBAction func changeSearchCase(sender: NSStepper) {
+        
     }
     
 }

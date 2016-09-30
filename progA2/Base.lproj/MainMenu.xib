@@ -22,7 +22,9 @@
                 <outlet property="nextDocButton" destination="Gqq-9E-gtV" id="z89-pp-1Ja"/>
                 <outlet property="ourPDF" destination="JDM-Rk-asK" id="2zW-UN-1Rt"/>
                 <outlet property="prevDocButton" destination="zmT-jA-yHp" id="96B-bO-mx4"/>
+                <outlet property="subtitleLabel" destination="lR5-KP-TaH" id="xrZ-rU-za8"/>
                 <outlet property="textSearchField" destination="AyW-jQ-OIM" id="PED-PX-bM4"/>
+                <outlet property="titleLabel" destination="8vl-Iz-cUr" id="unm-4Y-phH"/>
                 <outlet property="window" destination="QvC-M9-y7g" id="gIp-Ho-8D9"/>
             </connections>
         </customObject>
@@ -679,17 +681,17 @@
         <window title="progA2" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" animationBehavior="default" id="QvC-M9-y7g">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="335" y="390" width="792" height="687"/>
+            <rect key="contentRect" x="335" y="390" width="792" height="721"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1920" height="1057"/>
             <view key="contentView" id="EiT-Mj-1SZ">
-                <rect key="frame" x="0.0" y="0.0" width="792" height="687"/>
+                <rect key="frame" x="0.0" y="0.0" width="792" height="721"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <pdfView autoresizesSubviews="NO" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="JDM-Rk-asK">
-                        <rect key="frame" x="20" y="61" width="752" height="566"/>
+                        <rect key="frame" x="20" y="95" width="752" height="566"/>
                     </pdfView>
                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dXd-WT-uG9">
-                        <rect key="frame" x="339" y="13" width="115" height="32"/>
+                        <rect key="frame" x="339" y="47" width="115" height="32"/>
                         <buttonCell key="cell" type="push" title="Open PDF" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="MUh-Qy-W0l">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
@@ -699,7 +701,7 @@
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4O3-iZ-Whr">
-                        <rect key="frame" x="729" y="13" width="49" height="32"/>
+                        <rect key="frame" x="723" y="19" width="55" height="32"/>
                         <buttonCell key="cell" type="push" title="&gt;" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="h4m-0x-L8Z">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
@@ -709,7 +711,7 @@
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="drl-m1-dLe">
-                        <rect key="frame" x="680" y="13" width="49" height="32"/>
+                        <rect key="frame" x="668" y="19" width="55" height="32"/>
                         <buttonCell key="cell" type="push" title="&lt;" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="xqr-tn-nWv">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
@@ -719,7 +721,7 @@
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eYe-z0-Ooj">
-                        <rect key="frame" x="517" y="13" width="53" height="32"/>
+                        <rect key="frame" x="615" y="47" width="55" height="32"/>
                         <buttonCell key="cell" type="push" title="-" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="F7K-He-O5t">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
@@ -729,7 +731,7 @@
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uxK-nw-BNq">
-                        <rect key="frame" x="570" y="13" width="55" height="32"/>
+                        <rect key="frame" x="668" y="47" width="55" height="32"/>
                         <buttonCell key="cell" type="push" title="+" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="Hn2-ED-v1A">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
@@ -739,7 +741,7 @@
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1gD-Rk-aoz">
-                        <rect key="frame" x="625" y="13" width="55" height="32"/>
+                        <rect key="frame" x="723" y="47" width="55" height="32"/>
                         <buttonCell key="cell" type="push" title="[ ]" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="kwU-0s-JIA">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
@@ -749,7 +751,7 @@
                         </connections>
                     </button>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5ME-Sn-g1D">
-                        <rect key="frame" x="260" y="635" width="273" height="21"/>
+                        <rect key="frame" x="260" y="669" width="273" height="21"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" id="Hzd-Fv-yc2">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -757,7 +759,7 @@
                         </textFieldCell>
                     </textField>
                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Gqq-9E-gtV">
-                        <rect key="frame" x="533" y="639" width="49" height="32"/>
+                        <rect key="frame" x="533" y="673" width="49" height="32"/>
                         <buttonCell key="cell" type="push" title="&gt;" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="HTN-wL-g3M">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
@@ -767,7 +769,7 @@
                         </connections>
                     </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zmT-jA-yHp">
-                        <rect key="frame" x="205" y="639" width="49" height="32"/>
+                        <rect key="frame" x="205" y="673" width="49" height="32"/>
                         <buttonCell key="cell" type="push" title="&lt;" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="7yB-2x-l1b">
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
@@ -777,7 +779,7 @@
                         </connections>
                     </button>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DVC-cG-wlV">
-                        <rect key="frame" x="302" y="659" width="189" height="21"/>
+                        <rect key="frame" x="302" y="693" width="189" height="21"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" id="Er7-h3-Eqf">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -785,33 +787,15 @@
                         </textFieldCell>
                     </textField>
                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3jX-ig-F2a">
-                        <rect key="frame" x="18" y="32" width="128" height="21"/>
+                        <rect key="frame" x="18" y="53" width="128" height="21"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="Page 0 of 0" placeholderString="" id="XX2-fC-epU">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
-                    <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vBz-qQ-C7s">
-                        <rect key="frame" x="36" y="7" width="31" height="22"/>
-                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="center" placeholderString="#" drawsBackground="YES" id="s4Z-Tv-DB8">
-                            <font key="font" metaFont="system" size="12"/>
-                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                        </textFieldCell>
-                    </textField>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3Di-gu-9Fz">
-                        <rect key="frame" x="69" y="1" width="65" height="32"/>
-                        <buttonCell key="cell" type="push" title="Go" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="jaD-gM-Bs0">
-                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="system"/>
-                        </buttonCell>
-                        <connections>
-                            <action selector="goToPage:" target="Voe-Tx-rLC" id="ogD-Zs-Wty"/>
-                        </connections>
-                    </button>
                     <searchField wantsLayer="YES" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="AyW-jQ-OIM">
-                        <rect key="frame" x="152" y="19" width="185" height="22"/>
+                        <rect key="frame" x="254" y="20" width="285" height="22"/>
                         <searchFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" borderStyle="bezel" usesSingleLineMode="YES" bezelStyle="round" id="guJ-wc-Pdm">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
@@ -821,9 +805,43 @@
                             <action selector="textSearch:" target="Voe-Tx-rLC" id="evm-dn-KIc"/>
                         </connections>
                     </searchField>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8vl-Iz-cUr">
+                        <rect key="frame" x="261" y="680" width="270" height="35"/>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="PDF Elite" id="BZK-W2-w1a">
+                            <font key="font" metaFont="system" size="25"/>
+                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lR5-KP-TaH">
+                        <rect key="frame" x="242" y="668" width="308" height="17"/>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" title="The PDF viewer that makes you feel good" id="cIA-QM-GxK">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vBz-qQ-C7s">
+                        <rect key="frame" x="36" y="23" width="31" height="22"/>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" alignment="center" placeholderString="#" drawsBackground="YES" id="s4Z-Tv-DB8">
+                            <font key="font" metaFont="system" size="12"/>
+                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
+                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="3Di-gu-9Fz">
+                        <rect key="frame" x="69" y="17" width="65" height="32"/>
+                        <buttonCell key="cell" type="push" title="Go" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="jaD-gM-Bs0">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="goToPage:" target="Voe-Tx-rLC" id="ogD-Zs-Wty"/>
+                        </connections>
+                    </button>
                 </subviews>
             </view>
-            <point key="canvasLocation" x="-920" y="341.5"/>
+            <point key="canvasLocation" x="-1548" y="373.5"/>
         </window>
     </objects>
 </document>

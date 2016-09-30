@@ -15,6 +15,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBOutlet weak var window: NSWindow!
     @IBOutlet weak var ourPDF: PDFView!
     
+    @IBOutlet weak var titleLabel: NSTextField!
+    @IBOutlet weak var subtitleLabel: NSTextField!
+    
     @IBOutlet weak var headerLabel: NSTextField!
     @IBOutlet weak var currentDocLabel: NSTextField!
     
@@ -54,6 +57,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         if(fileChooser.runModal() == NSModalResponseOK) {
             self.docs = fileChooser.URLs
             //let path = result!.path!
+            titleLabel.hidden = true
+            subtitleLabel.hidden = true
             setPDF(docs[0])
             headerLabel.stringValue = "Current Document:"
             if(docs.count > 1){
@@ -137,8 +142,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     @IBAction func textSearch(sender: NSSearchField) {
-        let results = ourPDF.document().findString(textSearchField.stringValue, withOptions: 0)
-        print(results)
+        if textSearchField.stringValue != "" {
+            let results = ourPDF.document().findString(textSearchField.stringValue, withOptions: 0)
+    
+            if !results.isEmpty {
+                ourPDF.goToSelection(results[0] as! PDFSelection)
+                ourPDF.setHighlightedSelections(results)
+            }
+        }
     }
     
 }

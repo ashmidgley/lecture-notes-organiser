@@ -34,6 +34,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBOutlet weak var textSearchField: NSSearchField!
     @IBOutlet weak var casesLabel: NSTextField!
     @IBOutlet weak var searchCasesStepper: NSStepper!
+    var currStepperVal = 0
+    var results = [AnyObject]()
     
     func applicationDidFinishLaunching(aNotification: NSNotification) {
         // Insert code here to initialize your application
@@ -88,7 +90,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         currentPageNoLabel.stringValue = "Page \(ourPDF.document().indexForPage(ourPDF.currentPage())+1) of \(pages)"
         let pathC = docs[docIndex].pathComponents!
         currentDocLabel.stringValue = "\(pathC[pathC.count-1])"
-        
+        if textSearchField.stringValue == "" || results.isEmpty {
+            casesLabel.stringValue.removeAll()
+            ourPDF.setHighlightedSelections(nil)
+        }else{
+            casesLabel.stringValue = "Case \(currStepperVal+1) of \(results.count)"
+        }
     }
 
     @IBAction func previousPage(sender: NSButton) {
@@ -148,22 +155,31 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBAction func textSearch(sender: NSSearchField) {
         if loaded {
             if textSearchField.stringValue != "" {
-                let results = ourPDF.document().findString(textSearchField.stringValue, withOptions: 0)
+                self.results = ourPDF.document().findString(textSearchField.stringValue, withOptions: 0)
                 if !results.isEmpty {
-                    casesLabel.stringValue = "\(results.count) cases"
+                    casesLabel.hidden = false
                     searchCasesStepper.hidden = false
                     ourPDF.goToSelection(results[0] as! PDFSelection)
                     ourPDF.setHighlightedSelections(results)
                 }
             }else{
-                casesLabel.stringValue.removeAll()
                 searchCasesStepper.hidden = true
             }
         }
     }
     
     @IBAction func changeSearchCase(sender: NSStepper) {
-        
+        let stepVal = searchCasesStepper.intValue
+        let cStepVal = Int32(currStepperVal)
+        if stepVal < cStepVal && currStepperVal != 0{
+            //moving backwards
+            currStepperVal -= 1
+            ourPDF.goToSelection(results[currStepperVal] as! PDFSelection)
+        }else if stepVal > cStepVal && currStepperVal != results.count-1{
+            //moving upwards
+            currStepperVal += 1
+            ourPDF.goToSelection(results[currStepperVal] as! PDFSelection)
+        }
     }
     
 }

@@ -36,12 +36,16 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBOutlet weak var searchCasesStepper: NSStepper!
     var currStepperVal = 0
     var results = [AnyObject]()
+    let highlightColor = NSColor(red: 1, green: 1, blue: 0, alpha: 1)
+    
+    @IBOutlet weak var bookmarksView: NSScrollView!
     
     func applicationDidFinishLaunching(aNotification: NSNotification) {
         // Insert code here to initialize your application
         prevDocButton.hidden = true
         nextDocButton.hidden = true
         searchCasesStepper.hidden = true
+        bookmarksView.autohidesScrollers = true
     }
 
     func applicationWillTerminate(aNotification: NSNotification) {
@@ -159,6 +163,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 if !results.isEmpty {
                     casesLabel.hidden = false
                     searchCasesStepper.hidden = false
+                    for s in results {
+                        s.setColor(highlightColor)
+                    }
                     ourPDF.goToSelection(results[0] as! PDFSelection)
                     ourPDF.setHighlightedSelections(results)
                 }
@@ -180,6 +187,25 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             currStepperVal += 1
             ourPDF.goToSelection(results[currStepperVal] as! PDFSelection)
         }
+    }
+
+    @IBAction func addAnnotation(sender: NSButton) {
+        if loaded {
+            let annotation = PDFAnnotationText()
+            let rect = NSRect(x: 5, y: 5, width: 50, height: 50)
+            annotation.setShouldDisplay(true)
+            annotation.setBounds(rect)
+            ourPDF.currentPage().addAnnotation(annotation)
+        }
+    }
+    
+    @IBAction func addBookmark(sender: NSButton) {
+        let currPage = ourPDF.document().indexForPage(ourPDF.currentPage())+1
+        print("Page \(currPage) added to bookmarks")
+        let label = NSButton()
+        label.stringValue = "Page \(currPage)"
+        bookmarksView.addSubview(label)
+        bookmarksView.updateLayer()
     }
     
 }

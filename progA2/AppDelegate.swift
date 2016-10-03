@@ -19,6 +19,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     var docIndex = 0
     var loaded = false
     
+    @IBOutlet weak var toolbarBox: NSBox!
+    
+    @IBOutlet weak var thumbnailView: PDFThumbnailView!
+    
     @IBOutlet weak var titleLabel: NSTextField!
     @IBOutlet weak var subtitleLabel: NSTextField!
     
@@ -38,14 +42,26 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     var results = [AnyObject]()
     let highlightColor = NSColor(red: 1, green: 1, blue: 0, alpha: 1)
     
+    /*
     @IBOutlet weak var bookmarksView: NSScrollView!
+    var bookmarks = [NSTextField]()
+    var bookmarkNo = [Int]()
+    */
     
     func applicationDidFinishLaunching(aNotification: NSNotification) {
         // Insert code here to initialize your application
+        thumbnailView.setPDFView(ourPDF)
+        //thumbnailView.set
+        //let thumbSize = NSSize(width: , height: )
+       // thumbnailView.setThumbnailSize(thumbSize)
+        
+        
         prevDocButton.hidden = true
         nextDocButton.hidden = true
         searchCasesStepper.hidden = true
-        bookmarksView.autohidesScrollers = true
+        
+        //Need to know when the user clicks on the annotation so we can input keyboard text to annotation field
+        //@”PDFAnnotationHit”
     }
 
     func applicationWillTerminate(aNotification: NSNotification) {
@@ -159,15 +175,15 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBAction func textSearch(sender: NSSearchField) {
         if loaded {
             if textSearchField.stringValue != "" {
-                self.results = ourPDF.document().findString(textSearchField.stringValue, withOptions: 0)
+                self.results = ourPDF.document().findString(textSearchField.stringValue, withOptions: 1)
                 if !results.isEmpty {
                     casesLabel.hidden = false
                     searchCasesStepper.hidden = false
                     for s in results {
                         s.setColor(highlightColor)
                     }
-                    ourPDF.goToSelection(results[0] as! PDFSelection)
                     ourPDF.setHighlightedSelections(results)
+                    ourPDF.goToSelection(results[0] as! PDFSelection)
                 }
             }else{
                 searchCasesStepper.hidden = true
@@ -192,21 +208,30 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBAction func addAnnotation(sender: NSButton) {
         if loaded {
             let annotation = PDFAnnotationText()
-            let rect = NSRect(x: 5, y: 5, width: 50, height: 50)
+            let rect = NSRect(x: 5, y: 5, width: 40, height: 40)
             annotation.setShouldDisplay(true)
             annotation.setBounds(rect)
             ourPDF.currentPage().addAnnotation(annotation)
         }
     }
-    
+
+    /*
     @IBAction func addBookmark(sender: NSButton) {
         let currPage = ourPDF.document().indexForPage(ourPDF.currentPage())+1
-        print("Page \(currPage) added to bookmarks")
-        let label = NSButton()
-        label.stringValue = "Page \(currPage)"
-        bookmarksView.addSubview(label)
-        bookmarksView.updateLayer()
+        let fieldRect = NSRect(x: 5, y: 10*(2*bookmarks.count), width: 100, height: 20)
+        let bookmark = NSTextField(frame: fieldRect)
+        bookmark.stringValue = "\(currentDocLabel.stringValue): P\(currPage)"
+        bookmark.editable = false
+
+        if !bookmarkNo.contains(currPage){
+            bookmarkNo.append(currPage)
+            bookmarks.append(bookmark)
+            for b in bookmarks {
+                bookmarksView.addSubview(b)
+            }
+            bookmarksView.updateLayer()
+        }
     }
-    
+ */
 }
 

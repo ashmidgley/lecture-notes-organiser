@@ -697,7 +697,7 @@
                     </pdfView>
                     <pdfThumbnailView fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VCY-Ul-vfS">
                         <rect key="frame" x="0.0" y="95" width="173" height="566"/>
-                        <size key="thumbnailSize" width="128" height="128"/>
+                        <size key="thumbnailSize" width="128" height="100"/>
                     </pdfThumbnailView>
                     <box fixedFrame="YES" boxType="custom" borderType="line" translatesAutoresizingMaskIntoConstraints="NO" id="nfU-06-KXv">
                         <rect key="frame" x="0.0" y="657" width="945" height="35"/>
@@ -781,7 +781,7 @@
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5ME-Sn-g1D">
-                                    <rect key="frame" x="341" y="19" width="273" height="21"/>
+                                    <rect key="frame" x="341" y="9" width="273" height="31"/>
                                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" id="Hzd-Fv-yc2">
                                         <font key="font" metaFont="system"/>
                                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
@@ -811,7 +811,7 @@
                                 <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="DVC-cG-wlV">
                                     <rect key="frame" x="383" y="43" width="189" height="21"/>
                                     <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="center" id="Er7-h3-Eqf">
-                                        <font key="font" metaFont="system"/>
+                                        <font key="font" metaFont="system" size="20"/>
                                         <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                     </textFieldCell>

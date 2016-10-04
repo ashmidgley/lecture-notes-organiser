@@ -14,20 +14,25 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     @IBOutlet weak var window: NSWindow!
     @IBOutlet weak var ourPDF: PDFView!
+    var currPage = 1
     var pages = 0
     var docs = [NSURL]()
     var docIndex = 0
     var loaded = false
-    
-    @IBOutlet weak var toolbarBox: NSBox!
-    
-    @IBOutlet weak var thumbnailView: PDFThumbnailView!
     
     @IBOutlet weak var titleLabel: NSTextField!
     @IBOutlet weak var subtitleLabel: NSTextField!
     
     @IBOutlet weak var headerLabel: NSTextField!
     @IBOutlet weak var currentDocLabel: NSTextField!
+    
+    @IBOutlet weak var displaySelectedButton: NSPopUpButton!
+    @IBOutlet weak var thumbnailView: PDFThumbnailView!
+    @IBOutlet weak var notesField: NSTextField!
+    var notes = [String]()
+    @IBOutlet weak var bookmarksView: NSScrollView!
+    var bookmarks = [NSButton]()
+    var bookmarkNo = [Int]()
     
     @IBOutlet weak var currentPageNoLabel: NSTextField!
     @IBOutlet weak var goToPageNoField: NSTextField!
@@ -42,26 +47,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     var results = [AnyObject]()
     let highlightColor = NSColor(red: 1, green: 1, blue: 0, alpha: 1)
     
-    /*
-    @IBOutlet weak var bookmarksView: NSScrollView!
-    var bookmarks = [NSTextField]()
-    var bookmarkNo = [Int]()
-    */
-    
     func applicationDidFinishLaunching(aNotification: NSNotification) {
         // Insert code here to initialize your application
         thumbnailView.setPDFView(ourPDF)
-        //thumbnailView.set
-        //let thumbSize = NSSize(width: , height: )
-       // thumbnailView.setThumbnailSize(thumbSize)
-        
-        
         prevDocButton.hidden = true
         nextDocButton.hidden = true
         searchCasesStepper.hidden = true
-        
-        //Need to know when the user clicks on the annotation so we can input keyboard text to annotation field
-        //@”PDFAnnotationHit”
+        notesField.hidden = true
+        bookmarksView.hidden = true
     }
 
     func applicationWillTerminate(aNotification: NSNotification) {
@@ -101,15 +94,29 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let pdf = PDFDocument(URL: url)
         ourPDF.setDocument(pdf)
         pages = pdf.pageCount()
+        notes = [String](count: pages, repeatedValue: "")
         
-        let timer = NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: #selector(self.updateLabels), userInfo: nil, repeats: true)
+        let timer = NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: #selector(self.updateViews), userInfo: nil, repeats: true)
         timer.fire()
     }
     
-    func updateLabels(){
-        currentPageNoLabel.stringValue = "Page \(ourPDF.document().indexForPage(ourPDF.currentPage())+1) of \(pages)"
+    func updateViews(){
+        //notes view
+        if currPage != ourPDF.document().indexForPage(ourPDF.currentPage())+1 {
+            notes[currPage-1] = notesField.stringValue
+            notesField.stringValue = notes[ourPDF.document().indexForPage(ourPDF.currentPage())]
+            notesField.updateLayer()
+        }
+        
+        //current page label
+        currPage = ourPDF.document().indexForPage(ourPDF.currentPage())+1
+        currentPageNoLabel.stringValue = "Page \(currPage) of \(pages)"
+        
+        //current document label
         let pathC = docs[docIndex].pathComponents!
         currentDocLabel.stringValue = "\(pathC[pathC.count-1])"
+        
+        //search elements
         if textSearchField.stringValue == "" || results.isEmpty {
             casesLabel.stringValue.removeAll()
             ourPDF.setHighlightedSelections(nil)
@@ -215,15 +222,16 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
 
-    /*
     @IBAction func addBookmark(sender: NSButton) {
         let currPage = ourPDF.document().indexForPage(ourPDF.currentPage())+1
-        let fieldRect = NSRect(x: 5, y: 10*(2*bookmarks.count), width: 100, height: 20)
-        let bookmark = NSTextField(frame: fieldRect)
-        bookmark.stringValue = "\(currentDocLabel.stringValue): P\(currPage)"
-        bookmark.editable = false
-
-        if !bookmarkNo.contains(currPage){
+        let bookStr = "\(currentDocLabel.stringValue) - Page \(currPage)"
+        
+        if !bookmarkNo.contains(currPage) {
+            let fieldRect = NSRect(x: 5, y: 15*(2*bookmarks.count), width: 150, height: 30)
+            let bookmark = NSButton(frame: fieldRect)
+            bookmark.title = bookStr
+            bookmark.tag = currPage
+            bookmark.action = Selector(self.jumpToPage(bookmark))
             bookmarkNo.append(currPage)
             bookmarks.append(bookmark)
             for b in bookmarks {
@@ -232,6 +240,28 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             bookmarksView.updateLayer()
         }
     }
- */
+    
+    func jumpToPage(sender: NSButton) {
+        ourPDF.goToPage(ourPDF.document().pageAtIndex(sender.tag-1))
+    }
+    
+    @IBAction func displayOptionSelected(sender: NSPopUpButton) {
+        let curr = displaySelectedButton.selectedItem?.title
+        if curr == "Thumbnail" {
+            thumbnailView.hidden = false
+            bookmarksView.hidden = true
+            notesField.hidden = true
+        }else if curr == "Bookmarks" {
+            thumbnailView.hidden = true
+            bookmarksView.hidden = false
+            notesField.hidden = true
+        }else{
+            thumbnailView.hidden = true
+            bookmarksView.hidden = true
+            notesField.hidden = false
+        }
+    }
+    
+    
 }
 

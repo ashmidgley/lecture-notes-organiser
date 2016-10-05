@@ -24,7 +24,7 @@
                 <outlet property="goToPageNoField" destination="vBz-qQ-C7s" id="WUI-Ld-1yk"/>
                 <outlet property="headerLabel" destination="DVC-cG-wlV" id="kej-u8-JhR"/>
                 <outlet property="nextDocButton" destination="Gqq-9E-gtV" id="z89-pp-1Ja"/>
-                <outlet property="notesField" destination="TBw-AW-81n" id="v0q-CY-zAd"/>
+                <outlet property="notesField" destination="15y-A6-D92" id="qEn-81-3pL"/>
                 <outlet property="ourPDF" destination="JDM-Rk-asK" id="2zW-UN-1Rt"/>
                 <outlet property="prevDocButton" destination="zmT-jA-yHp" id="96B-bO-mx4"/>
                 <outlet property="searchCasesStepper" destination="ja9-ri-tes" id="DQr-mP-wqm"/>
@@ -701,14 +701,6 @@
                         <rect key="frame" x="0.0" y="95" width="173" height="566"/>
                         <size key="thumbnailSize" width="128" height="100"/>
                     </pdfThumbnailView>
-                    <textField verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="TBw-AW-81n">
-                        <rect key="frame" x="0.0" y="94" width="173" height="567"/>
-                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="8fr-ei-alF">
-                            <font key="font" metaFont="system"/>
-                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                        </textFieldCell>
-                    </textField>
                     <box fixedFrame="YES" boxType="custom" borderType="line" translatesAutoresizingMaskIntoConstraints="NO" id="nfU-06-KXv">
                         <rect key="frame" x="0.0" y="660" width="945" height="32"/>
                         <view key="contentView" ambiguous="YES" id="4OK-ls-I1L">
@@ -847,8 +839,8 @@
                                 </textField>
                             </subviews>
                         </view>
-                        <color key="borderColor" red="0.54695015589999996" green="0.74097303690000005" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                        <color key="fillColor" red="0.54695015589999996" green="0.74097303690000005" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="borderColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        <color key="fillColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </box>
                     <box fixedFrame="YES" title="Box" boxType="custom" borderType="line" translatesAutoresizingMaskIntoConstraints="NO" id="VrY-1z-XN4">
                         <rect key="frame" x="0.0" y="0.0" width="945" height="95"/>
@@ -940,8 +932,8 @@
                                 </button>
                             </subviews>
                         </view>
-                        <color key="borderColor" red="0.54695015589999996" green="0.74097303690000005" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                        <color key="fillColor" red="0.54695015589999996" green="0.74097303690000005" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="borderColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        <color key="fillColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                     </box>
                     <scrollView fixedFrame="YES" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="96d-Ug-kqp">
                         <rect key="frame" x="0.0" y="94" width="173" height="567"/>
@@ -963,12 +955,20 @@
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
                     </scrollView>
+                    <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="15y-A6-D92">
+                        <rect key="frame" x="0.0" y="94" width="173" height="567"/>
+                        <textFieldCell key="cell" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="ZH8-t3-4qk">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
                 </subviews>
             </view>
             <connections>
                 <outlet property="initialFirstResponder" destination="dXd-WT-uG9" id="44y-1F-g0y"/>
             </connections>
-            <point key="canvasLocation" x="-3103.5" y="223"/>
+            <point key="canvasLocation" x="-3762.5" y="66"/>
         </window>
     </objects>
 </document>

@@ -28,6 +28,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     @IBOutlet weak var displaySelectedButton: NSPopUpButton!
     @IBOutlet weak var thumbnailView: PDFThumbnailView!
+    
     @IBOutlet weak var notesField: NSTextField!
     var notes = [String]()
     @IBOutlet weak var bookmarksView: NSScrollView!
@@ -55,6 +56,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         searchCasesStepper.hidden = true
         notesField.hidden = true
         bookmarksView.hidden = true
+        print(bookmarksView.hasVerticalScroller)
+        print(bookmarksView.autohidesScrollers)
+
+        //NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(updatePageNumber), name: PDFViewAnnotationHitNotification, object: nil)
     }
 
     func applicationWillTerminate(aNotification: NSNotification) {
@@ -95,7 +100,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         ourPDF.setDocument(pdf)
         pages = pdf.pageCount()
         notes = [String](count: pages, repeatedValue: "")
-        
+        if loaded {
+            for b in bookmarks {
+                b.removeFromSuperview()
+            }
+            bookmarks.removeAll()
+            bookmarkNo.removeAll()
+            bookmarksView.updateLayer()
+        }
         let timer = NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: #selector(self.updateViews), userInfo: nil, repeats: true)
         timer.fire()
     }
@@ -223,24 +235,28 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     @IBAction func addBookmark(sender: NSButton) {
-        let currPage = ourPDF.document().indexForPage(ourPDF.currentPage())+1
-        let bookStr = "\(currentDocLabel.stringValue) - Page \(currPage)"
+        if loaded {
+            let currPage = ourPDF.document().indexForPage(ourPDF.currentPage())+1
+            let bookStr = "\(currentDocLabel.stringValue) - Page \(currPage)"
         
-        if !bookmarkNo.contains(currPage) {
-            let fieldRect = NSRect(x: 5, y: 15*(2*bookmarks.count), width: 150, height: 30)
-            let bookmark = NSButton(frame: fieldRect)
-            bookmark.title = bookStr
-            bookmark.tag = currPage
-            bookmark.action = Selector(self.jumpToPage(bookmark))
-            bookmarkNo.append(currPage)
-            bookmarks.append(bookmark)
-            for b in bookmarks {
-                bookmarksView.addSubview(b)
+            if !bookmarkNo.contains(currPage) {
+                let fieldRect = NSRect(x: 5, y: 15*(2*bookmarks.count), width: 150, height: 30)
+                let bookmark = NSButton(frame: fieldRect)
+                bookmark.title = bookStr
+                bookmark.tag = currPage
+            
+                bookmarkNo.append(currPage)
+                bookmarks.append(bookmark)
+                bookmark.action = #selector(self.jumpToPage)
+            
+                for b in bookmarks {
+                    bookmarksView.addSubview(b)
+                }
+                bookmarksView.updateLayer()
             }
-            bookmarksView.updateLayer()
         }
     }
-    
+
     func jumpToPage(sender: NSButton) {
         ourPDF.goToPage(ourPDF.document().pageAtIndex(sender.tag-1))
     }

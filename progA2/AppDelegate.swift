@@ -18,22 +18,23 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     var pages = 0
     var docs = [NSURL]()
     var docIndex = 0
+    var prevDoc = 0
     var loaded = false
+    var newDoc = false
     
     @IBOutlet weak var titleLabel: NSTextField!
     @IBOutlet weak var subtitleLabel: NSTextField!
     
-    @IBOutlet weak var headerLabel: NSTextField!
-    @IBOutlet weak var currentDocLabel: NSTextField!
+    @IBOutlet weak var docComboBox: NSComboBox!
     
     @IBOutlet weak var displaySelectedButton: NSPopUpButton!
     @IBOutlet weak var thumbnailView: PDFThumbnailView!
     
     @IBOutlet weak var notesField: NSTextField!
-    var notes = [String]()
-    @IBOutlet weak var bookmarksView: NSScrollView!
-    var bookmarks = [NSButton]()
-    var bookmarkStr = [[String]]()
+    var notes = [String: String]()
+    
+    var bookmarks = [Bookmark]()
+    @IBOutlet weak var bookmarksOptions: NSComboBox!
     
     @IBOutlet weak var currentPageNoLabel: NSTextField!
     @IBOutlet weak var goToPageNoField: NSTextField!
@@ -46,7 +47,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBOutlet weak var searchCasesStepper: NSStepper!
     var currStepperVal = 0
     var results = [AnyObject]()
-    let highlightColor = NSColor(red: 1, green: 1, blue: 0, alpha: 1)
+    let highlightBackColor = NSColor(red: 1, green: 1, blue: 0, alpha: 1)
+    let highlightMainColor = NSColor(red: 1, green: 0.65, blue: 0, alpha: 1)
     
     func applicationDidFinishLaunching(aNotification: NSNotification) {
         // Insert code here to initialize your application
@@ -55,10 +57,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         nextDocButton.hidden = true
         searchCasesStepper.hidden = true
         notesField.hidden = true
-        bookmarksView.hidden = true
+        docComboBox.hidden = true
+        docComboBox.editable = false
+        bookmarksOptions.hidden = true
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(updatePageNumber), name: PDFViewPageChangedNotification, object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(updateDocument), name: PDFViewDocumentChangedNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(updatePageNumber), name: PDFViewPageChangedNotification, object: nil)
     }
 
     func applicationWillTerminate(aNotification: NSNotification) {
@@ -66,35 +70,44 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     func updatePageNumber() {
-        //notes field
-        if currPage != ourPDF.document().indexForPage(ourPDF.currentPage())+1 && !notes.isEmpty{
-            notes[currPage-1] = notesField.stringValue
-            notesField.stringValue = notes[ourPDF.document().indexForPage(ourPDF.currentPage())]
+        if !newDoc {
+            //notes field
+            notes["\(docs[docIndex].lastPathComponent!) Page \(currPage)"] = notesField.stringValue
+            let note = notes["\(docs[docIndex].lastPathComponent!) Page \(ourPDF.document().indexForPage(ourPDF.currentPage())+1)"]
+            if  note != nil && note != "" {
+                notesField.stringValue = note!
+            }else{
+                notesField.stringValue = ""
+            }
             notesField.updateLayer()
+            
+            //page elements
+            self.currPage = ourPDF.document().indexForPage(ourPDF.currentPage())+1
+            currentPageNoLabel.stringValue = "Page \(self.currPage) of \(self.pages)"
         }
-        
-        //page elements
-        self.currPage = ourPDF.document().indexForPage(ourPDF.currentPage())+1
-        currentPageNoLabel.stringValue = "Page \(self.currPage) of \(self.pages)"
     }
     
     func updateDocument(){
-        let pathC = docs[docIndex].pathComponents!
-        currentDocLabel.stringValue = "\(pathC[pathC.count-1])"
-        self.pages = ourPDF.document().pageCount()
-        self.currPage = 1
-        currentPageNoLabel.stringValue = "Page \(self.currPage) of \(self.pages)"
+        //notes view
+        notes["\(docs[prevDoc].lastPathComponent!) Page \(currPage)"] = notesField.stringValue
         
-        //print("Saving")
-        //NSKeyedArchiver.archiveRootObject(notes, toFile: "savedNotes.bin")
-        
-        notes = [String](count: self.pages, repeatedValue: "")
-        notesField.stringValue = ""
+        let note = notes["\(docs[docIndex].lastPathComponent!) Page 1"]
+        if  note != nil && note != "" {
+            notesField.stringValue = note!
+        }else{
+            notesField.stringValue = ""
+        }
         notesField.updateLayer()
+        
+        prevDoc = docIndex
+        self.currPage = 1
+        newDoc = false
+        docComboBox.stringValue = docs[docIndex].lastPathComponent!
+        self.pages = ourPDF.document().pageCount()
+        currentPageNoLabel.stringValue = "Page \(ourPDF.document().indexForPage(ourPDF.currentPage())+1) of \(self.pages)"
     }
     
     @IBAction func choosePDF(sender: AnyObject) {
-        //NSWorkspace.sharedWorkspace().selectFile(nil, inFileViewerRootedAtPath: "/Home")
         let fileChooser = NSOpenPanel();
         fileChooser.title = "Choose a .pdf file";
         fileChooser.showsResizeIndicator = true;
@@ -105,33 +118,59 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         fileChooser.allowedFileTypes = ["pdf"];
         
         if(fileChooser.runModal() == NSModalResponseOK) {
-            self.docs = fileChooser.URLs
-            //let path = result!.path!
+            //remove previous documents navigation if there is any available
+            if docComboBox.numberOfItems > 0 {
+                docComboBox.removeAllItems()
+                docs = [NSURL]()
+            }
             
+            self.docs = fileChooser.URLs
             self.loaded = true
             titleLabel.hidden = true
             subtitleLabel.hidden = true
             
+            
             //update bookmarks
-            for b in bookmarks {
-                b.removeFromSuperview()
+            if bookmarks.count > 0 {
+                bookmarks.removeAll()
+                bookmarksOptions.removeAllItems()
+                bookmarksOptions.hidden = true
+                bookmarksOptions.updateLayer()
             }
-            bookmarks.removeAll()
-            bookmarkStr.removeAll()
-            bookmarksView.updateLayer()
-            bookmarkStr = Array(count: docs.count, repeatedValue: Array(count: 1000, repeatedValue: ""))
+
+            //unarchive saved notes
+            if let savedNotes = NSKeyedUnarchiver.unarchiveObjectWithFile(NSBundle.mainBundle().resourcePath!+"/notesSave") as? [String: String] {
+                print("loaded")
+                notes = savedNotes
+            }
             
-            setPDF(docs[0])
-            
-            self.pages = ourPDF.document().pageCount()
-            notes = [String](count: self.pages, repeatedValue: "")
+            //set initial notes value
+            let note = notes["\(docs[0].lastPathComponent!) Page 1"]
+            if  note != nil && note != "" {
+                notesField.stringValue = note!
+            }else{
+                notesField.stringValue = ""
+            }
             notesField.updateLayer()
             
-            headerLabel.stringValue = "Current Document:"
+            //allow navigation buttons if more than one document
             if(docs.count > 1){
                 prevDocButton.hidden = false
                 nextDocButton.hidden = false
+            }else{
+                prevDocButton.hidden = true
+                nextDocButton.hidden = true
             }
+            
+            //add document selection to header combo box
+            for url in docs {
+                docComboBox.addItemWithObjectValue(url.lastPathComponent!)
+            }
+            docComboBox.stringValue = docs[0].lastPathComponent!
+            docComboBox.hidden = false
+            
+            //set the pdfview to display the initial document
+            setPDF(docs[0])
         }else{
             //User clicked on "Cancel"
             return
@@ -139,8 +178,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     func setPDF(url: NSURL){
-        let pdf = PDFDocument(URL: url)
-        ourPDF.setDocument(pdf)
+        ourPDF.setDocument(PDFDocument(URL: url))
     }
 
     @IBAction func previousPage(sender: AnyObject) {
@@ -159,6 +197,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         if !docs.isEmpty {
             if(docIndex != 0){
                 docIndex -= 1
+                newDoc = true
                 setPDF(docs[docIndex])
             }
         }
@@ -168,6 +207,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         if !docs.isEmpty {
             if(docIndex != docs.count-1){
                 docIndex += 1
+                newDoc = true
                 setPDF(docs[docIndex])
             }
         }
@@ -197,6 +237,52 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
     
+    @IBAction func saveNotes(sender: AnyObject) {
+        NSKeyedArchiver.archiveRootObject(notes, toFile: NSBundle.mainBundle().resourcePath!+"/notesSave")
+    }
+    
+    @IBAction func discardNotes(sender: AnyObject) {
+        notesField.stringValue = ""
+        notes = [String: String]()
+        notesField.updateLayer()
+    }
+    
+    @IBAction func addBookmark(sender: AnyObject) {
+        if loaded {
+            let newBookmark = Bookmark(docIndex: self.docIndex, pageNo: self.currPage-1)
+            if !(containsBookmark(bookmarks, new: newBookmark)) {
+                bookmarks.append(newBookmark)
+                let bItem = "\(docs[newBookmark.doc].lastPathComponent!) - Page \(newBookmark.page+1)"
+                bookmarksOptions.addItemWithObjectValue(bItem)
+                bookmarksOptions.stringValue = "Select a bookmark..."
+                bookmarksOptions.updateLayer()
+                
+                bookmarksOptions.hidden = false
+                bookmarksOptions.stringValue = "Select a bookmark..."
+                
+            }
+        }
+    }
+    
+    func containsBookmark(bookmarks: [Bookmark], new: Bookmark) -> Bool{
+        for b in bookmarks{
+            if b.bookmarkStr == new.bookmarkStr {
+                return true
+            }
+        }
+        return false
+    }
+    
+    @IBAction func bookmarkSelected(sender: AnyObject) {
+        if loaded {
+            let bookmark = bookmarks[bookmarksOptions.indexOfSelectedItem]
+            setPDF(docs[bookmark.doc])
+            ourPDF.goToPage(ourPDF.document().pageAtIndex(bookmark.page))
+            docComboBox.stringValue = docs[bookmark.doc].lastPathComponent!
+            bookmarksOptions.stringValue = "Select a bookmark..."
+        }
+    }
+    
     @IBAction func textSearch(sender: NSSearchField) {
         if loaded {
             if textSearchField.stringValue != "" {
@@ -204,8 +290,11 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 if !results.isEmpty {
                     casesLabel.hidden = false
                     searchCasesStepper.hidden = false
-                    for s in results {
-                        s.setColor(highlightColor)
+                    results[0].setColor(highlightMainColor)
+                    if results.count > 1 {
+                        for i in 1..<results.count {
+                            results[i].setColor(highlightBackColor)
+                        }
                     }
                     ourPDF.setHighlightedSelections(results)
                     ourPDF.goToSelection(results[0] as! PDFSelection)
@@ -215,6 +304,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 searchCasesStepper.hidden = true
                 casesLabel.stringValue.removeAll()
                 ourPDF.setHighlightedSelections(nil)
+                currStepperVal = 0
             }
         }
     }
@@ -222,77 +312,54 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBAction func changeSearchCase(sender: NSStepper) {
         let stepVal = searchCasesStepper.intValue
         let cStepVal = Int32(currStepperVal)
+        let rCount = Int32(results.count-1)
         if stepVal < cStepVal && currStepperVal != 0{
-            //moving backwards
+            //moving downwards
             currStepperVal -= 1
-            ourPDF.goToSelection(results[currStepperVal] as! PDFSelection)
-        }else if stepVal > cStepVal && currStepperVal != results.count-1{
+        }else if stepVal > cStepVal && currStepperVal < results.count-1{
             //moving upwards
             currStepperVal += 1
-            ourPDF.goToSelection(results[currStepperVal] as! PDFSelection)
+        }else if stepVal >= rCount {
+            searchCasesStepper.intValue = rCount
         }
-    }
-
-    @IBAction func addBookmark(sender: AnyObject) {
-        if loaded {
-            let bookStr = "\(currentDocLabel.stringValue) - Page \(self.currPage)"
-            if !bookmarkStr[docIndex].contains(bookStr) {
-                let fieldRect = NSRect(x: 5, y: 15*(2*bookmarks.count), width: 150, height: 30)
-                let bookmark = NSButton(frame: fieldRect)
-                bookmark.title = bookStr
-                bookmarkStr[docIndex][currPage-1] = bookStr
-                bookmarks.append(bookmark)
-                bookmark.action = #selector(self.jumpToPage)
-            
-                for b in bookmarks {
-                    bookmarksView.addSubview(b)
-                }
-                bookmarksView.updateLayer()
-            }
-        }
-    }
-
-    func jumpToPage(sender: NSButton) {
-        let bookmark = sender.title
-        var docI = 0
-        var pageNo = 0
-        for r in 0..<bookmarkStr.count {
-            for c in 0..<bookmarkStr[r].count {
-                if bookmarkStr[r][c] == bookmark {
-                    docI = r
-                    pageNo = c
-                    break
+        if results.count > 1 {
+            for i in 0..<results.count {
+                if i == currStepperVal {
+                    results[i].setColor(highlightMainColor)
+                }else{
+                    results[i].setColor(highlightBackColor)
                 }
             }
         }
-        
-        self.docIndex = docI
-        self.currPage = pageNo
-        setPDF(self.docs[docI])
-        ourPDF.goToPage(ourPDF.document().pageAtIndex(pageNo))
+        ourPDF.goToSelection(results[currStepperVal] as! PDFSelection)
+        ourPDF.setHighlightedSelections(results)
+        casesLabel.stringValue = "Case \(currStepperVal+1) of \(results.count)"
     }
     
     @IBAction func displayOptionSelected(sender: NSPopUpButton) {
         let curr = displaySelectedButton.selectedItem?.title
         if curr == "Thumbnail" {
             thumbnailView.hidden = false
-            bookmarksView.hidden = true
-            notesField.hidden = true
-        }else if curr == "Bookmarks" {
-            thumbnailView.hidden = true
-            bookmarksView.hidden = false
             notesField.hidden = true
         }else{
             thumbnailView.hidden = true
-            bookmarksView.hidden = true
             notesField.hidden = false
+        }
+    }
+    
+    @IBAction func docSelected(sender: NSComboBox) {
+        if loaded {
+            newDoc = true
+            setPDF(docs[sender.indexOfSelectedItem])
+            docIndex = sender.indexOfSelectedItem
+            docComboBox.stringValue = docs[sender.indexOfSelectedItem].lastPathComponent!
         }
     }
     
     @IBAction func aboutProgram(sender: AnyObject) {
         let about = NSAlert()
         about.messageText = "About the program"
-        about.informativeText = "This Lecture notes organiser was created by Ash Midgley.\n\nThe application is designed to open and manipulate PDF documents in a user friendly manner.\n"
+        about.informativeText = "This Lecture notes organiser was created by Ash Midgley for a COSC346 - Object Oriented programming project.\n\nThe application is designed to open and manipulate PDF documents in a user friendly manner.\n\nNo programmers were harmed in the production of this PDF viewer."
         about.alertStyle = NSAlertStyle.InformationalAlertStyle
         about.addButtonWithTitle("Close")
         
@@ -300,29 +367,4 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             return
         }
     }
-    
-    /*
-    @IBAction func addAnnotation(sender: NSButton) {
-        if loaded {
-            let annotation = PDFAnnotationText()
-            let rect = NSRect(x: 5, y: 5, width: 40, height: 40)
-            annotation.setShouldDisplay(true)
-            annotation.setBounds(rect)
-            ourPDF.currentPage().addAnnotation(annotation)
-        }
-    }
-    
-    @IBAction func runHelp(sender: AnyObject) {
-        let f1 = NSAlert()
-        f1.messageText = "Help"
-        f1.informativeText = "Welcome to help!\nWe will step through each tool that the user can use in the application."
-        f1.alertStyle = NSAlertStyle.WarningAlertStyle
-        f1.addButtonWithTitle("Done")
-        f1.addButtonWithTitle("Close")
-        
-        if f1.runModal() == NSAlertFirstButtonReturn {
-            //if done selected
-        }
-    }
- */
 }

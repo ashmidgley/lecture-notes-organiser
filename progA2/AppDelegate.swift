@@ -140,7 +140,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
             //unarchive saved notes
             if let savedNotes = NSKeyedUnarchiver.unarchiveObjectWithFile(NSBundle.mainBundle().resourcePath!+"/notesSave") as? [String: String] {
-                print("loaded")
                 notes = savedNotes
             }
             

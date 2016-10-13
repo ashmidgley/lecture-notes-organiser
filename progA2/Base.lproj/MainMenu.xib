@@ -811,7 +811,7 @@
                                         <action selector="zoomOut:" target="Voe-Tx-rLC" id="4fN-4X-5x5"/>
                                     </connections>
                                 </button>
-                                <comboBox verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="umt-p8-53v">
+                                <comboBox hidden="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="umt-p8-53v">
                                     <rect key="frame" x="644" y="2" width="231" height="26"/>
                                     <constraints>
                                         <constraint firstAttribute="width" constant="228" id="BfJ-Hl-G3a"/>
@@ -891,7 +891,7 @@
                             <action selector="saveNotes:" target="Voe-Tx-rLC" id="xGN-mA-hjq"/>
                         </connections>
                     </button>
-                    <textField verticalHuggingPriority="246" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="15y-A6-D92">
+                    <textField hidden="YES" verticalHuggingPriority="246" horizontalCompressionResistancePriority="250" translatesAutoresizingMaskIntoConstraints="NO" id="15y-A6-D92">
                         <rect key="frame" x="0.0" y="141" width="173" height="520"/>
                         <textFieldCell key="cell" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="ZH8-t3-4qk">
                             <font key="font" metaFont="system"/>
@@ -945,7 +945,7 @@
                                         <action selector="previousPage:" target="Voe-Tx-rLC" id="ZRK-0g-le5"/>
                                     </connections>
                                 </button>
-                                <stepper horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ja9-ri-tes">
+                                <stepper hidden="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ja9-ri-tes">
                                     <rect key="frame" x="619" y="17" width="19" height="27"/>
                                     <stepperCell key="cell" continuous="YES" alignment="left" maxValue="100" id="jhT-bR-cHh"/>
                                     <connections>
@@ -1046,7 +1046,7 @@
                             <rect key="frame" x="1" y="1" width="949" height="82"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="zmT-jA-yHp">
+                                <button hidden="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="zmT-jA-yHp">
                                     <rect key="frame" x="286" y="23" width="49" height="32"/>
                                     <buttonCell key="cell" type="push" title="&lt;" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="7yB-2x-l1b">
                                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -1078,12 +1078,12 @@
                                         <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                                     </textFieldCell>
                                 </textField>
-                                <comboBox verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="DLG-IS-3kq">
+                                <comboBox hidden="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="DLG-IS-3kq">
                                     <rect key="frame" x="346" y="26" width="260" height="26"/>
                                     <constraints>
                                         <constraint firstAttribute="width" constant="257" id="s9b-sm-yaY"/>
                                     </constraints>
-                                    <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" numberOfVisibleItems="5" id="zTS-yJ-HX8">
+                                    <comboBoxCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" completes="NO" numberOfVisibleItems="5" id="zTS-yJ-HX8">
                                         <font key="font" metaFont="system"/>
                                         <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -1092,7 +1092,7 @@
                                         <action selector="docSelected:" target="Voe-Tx-rLC" id="hwY-OD-KnX"/>
                                     </connections>
                                 </comboBox>
-                                <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Gqq-9E-gtV">
+                                <button hidden="YES" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="Gqq-9E-gtV">
                                     <rect key="frame" x="614" y="23" width="49" height="32"/>
                                     <buttonCell key="cell" type="push" title="&gt;" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="HTN-wL-g3M">
                                         <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
@@ -1156,7 +1156,7 @@
             <connections>
                 <outlet property="initialFirstResponder" destination="dXd-WT-uG9" id="44y-1F-g0y"/>
             </connections>
-            <point key="canvasLocation" x="-4465.5" y="-447"/>
+            <point key="canvasLocation" x="-4506.5" y="-495"/>
         </window>
     </objects>
 </document>

@@ -11,7 +11,7 @@ import Foundation
 public class Bookmark {
     
     let docIndex: Int
-    let pageNo: Int
+    let pageIndex: Int
     let bookmarkStr: String
     
     var doc: Int{
@@ -19,12 +19,12 @@ public class Bookmark {
     }
     
     var page: Int{
-        return pageNo
+        return pageIndex
     }
     
-    init(docIndex: Int, pageNo: Int){
+    init(docIndex: Int, pageIndex: Int){
         self.docIndex = docIndex
-        self.pageNo = pageNo
-        bookmarkStr = "\(docIndex) Page \(pageNo)"
+        self.pageIndex = pageIndex
+        bookmarkStr = "\(docIndex) Page \(pageIndex)"
     }
 }

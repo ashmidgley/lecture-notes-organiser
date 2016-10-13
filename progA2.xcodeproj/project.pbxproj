@@ -12,6 +12,9 @@
 		9721AAA11D935943006470E0 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9721AA9F1D935943006470E0 /* MainMenu.xib */; };
 		9721AAA91D935B5B006470E0 /* Quartz.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9721AAA81D935B5B006470E0 /* Quartz.framework */; };
 		9735C2451DA71E6C00894D0E /* Bookmark.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9735C2441DA71E6C00894D0E /* Bookmark.swift */; };
+		97B8D0611DAF80BF00E08E5C /* PDFViewerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97B8D0601DAF80BF00E08E5C /* PDFViewerModel.swift */; };
+		97B8D0681DAFAA7100E08E5C /* PDFViewerWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97B8D0661DAFAA7100E08E5C /* PDFViewerWindowController.swift */; };
+		97B8D0691DAFAA7100E08E5C /* PDFViewerWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 97B8D0671DAFAA7100E08E5C /* PDFViewerWindowController.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,6 +25,9 @@
 		9721AAA21D935943006470E0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9721AAA81D935B5B006470E0 /* Quartz.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quartz.framework; path = System/Library/Frameworks/Quartz.framework; sourceTree = SDKROOT; };
 		9735C2441DA71E6C00894D0E /* Bookmark.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Bookmark.swift; sourceTree = "<group>"; };
+		97B8D0601DAF80BF00E08E5C /* PDFViewerModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PDFViewerModel.swift; sourceTree = "<group>"; };
+		97B8D0661DAFAA7100E08E5C /* PDFViewerWindowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PDFViewerWindowController.swift; path = ../PDFViewerWindowController.swift; sourceTree = "<group>"; };
+		97B8D0671DAFAA7100E08E5C /* PDFViewerWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = PDFViewerWindowController.xib; path = ../PDFViewerWindowController.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,9 +63,12 @@
 			isa = PBXGroup;
 			children = (
 				9721AA9B1D935943006470E0 /* AppDelegate.swift */,
-				9721AA9D1D935943006470E0 /* Assets.xcassets */,
-				9721AA9F1D935943006470E0 /* MainMenu.xib */,
+				97B8D0601DAF80BF00E08E5C /* PDFViewerModel.swift */,
 				9735C2441DA71E6C00894D0E /* Bookmark.swift */,
+				9721AA9D1D935943006470E0 /* Assets.xcassets */,
+				97B8D0661DAFAA7100E08E5C /* PDFViewerWindowController.swift */,
+				9721AA9F1D935943006470E0 /* MainMenu.xib */,
+				97B8D0671DAFAA7100E08E5C /* PDFViewerWindowController.xib */,
 				9721AAA21D935943006470E0 /* Info.plist */,
 			);
 			path = progA2;
@@ -124,6 +133,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9721AA9E1D935943006470E0 /* Assets.xcassets in Resources */,
+				97B8D0691DAFAA7100E08E5C /* PDFViewerWindowController.xib in Resources */,
 				9721AAA11D935943006470E0 /* MainMenu.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -137,6 +147,8 @@
 			files = (
 				9721AA9C1D935943006470E0 /* AppDelegate.swift in Sources */,
 				9735C2451DA71E6C00894D0E /* Bookmark.swift in Sources */,
+				97B8D0681DAFAA7100E08E5C /* PDFViewerWindowController.swift in Sources */,
+				97B8D0611DAF80BF00E08E5C /* PDFViewerModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
